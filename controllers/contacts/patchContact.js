@@ -1,9 +1,11 @@
-const contacts = require('../../data/contacts.json');
+const { contact } = require('../../services');
 const { schemas } = require('../../utils/validate');
 
-const patchContact = async (req, res) => {
-  const { error } = schemas.contactPatchSchema.validate(req.body)
-  if (error) {
+const patchContact = async (req, res, next) => {
+  const { body } = req;
+  const { error } = schemas.contactPatchSchema.validate(body);
+  if (error || Object.keys(body).length === 0) {
+
     res.status(400).json({
       status: 'error',
       code: 400,
@@ -12,23 +14,28 @@ const patchContact = async (req, res) => {
     return;
   }
   const { contactId } = req.params;
-  const index = contacts.findIndex(contact => contact.id.toString() === contactId.toString());
-  if (index === -1) {
-    res.status(404).json({
-      status: 'error',
-      code: 404,
-      message: 'Not found'
-    })
-  };
 
-  contacts[index] = { ...contacts[index], ...req.body, id: contactId };
-  res.json({
-    status: 'success',
-    code: 200,
-    data: {
-      result: contacts[index],
+  try {
+    const result = await contact.patchContact(contactId, body);
+    if (result) {
+      res.json({
+        status: 'success',
+        code: 200,
+        data: {
+          result,
+        }
+      });
+    } else {
+      res.status(404).json({
+        status: 'error',
+        code: 404,
+        message: 'Not found'
+      });
     }
-  })
+  } catch (e) {
+    console.error(e);
+    next(e);
+  };
 };
 
 module.exports = patchContact;

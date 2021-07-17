@@ -1,28 +1,25 @@
 const { contact } = require('../../services');
-const { schemas } = require('../../utils/validate');
 
-const updateContact = async (req, res, next) => {
+const updateStatus = async (req, res, next) => {
+  const { contactId } = req.params;
   const { body } = req;
-  const { error } = schemas.contactPatchSchema.validate(body);
-  if (error || Object.keys(body).length === 0) {
 
+  if (Object.keys(body).length === 0) {
     res.status(400).json({
       status: 'error',
       code: 400,
-      message: 'missing field'
-    })
-    return;
+      message: 'missing field favorite',
+    });
   }
-  const { contactId } = req.params;
 
   try {
-    const result = await contact.updateContact(contactId, body);
+    const result = await contact.updateStatusContact(contactId, body);
     if (result) {
       res.json({
         status: 'success',
         code: 200,
         data: {
-          result: body,
+          result,
         }
       });
     } else {
@@ -38,4 +35,4 @@ const updateContact = async (req, res, next) => {
   };
 };
 
-module.exports = updateContact;
+module.exports = updateStatus;
