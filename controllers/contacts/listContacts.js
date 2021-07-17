@@ -13,6 +13,7 @@ const listContacts = async (_req, res) => {
   } catch (error) {
     console.log(error)
   }
+
 }
 
 module.exports = listContacts;
