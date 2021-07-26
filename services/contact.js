@@ -1,7 +1,17 @@
 const { Contact } = require('../models');
 
-const listContacts = () => {
-  return Contact.find({});
+const listContacts = ({ limit = 20, offset = 0, favorite, }) => {
+  return Contact.paginate({ }, // {favorite}
+    {
+      limit,
+      offset,
+      populate: ({
+        path: 'contacts',
+        match: {
+          favorite: false,
+        }
+      })
+    });
 }
 
 const addContact = (body) => {
