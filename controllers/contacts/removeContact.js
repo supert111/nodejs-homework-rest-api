@@ -1,6 +1,6 @@
 const { contact } = require('../../services');
 
-const removeContact = async (req, res) => {
+const removeContact = async(req, res) => {
   const { contactId } = req.params;
   try {
     const delContact = await contact.removeContact(contactId);

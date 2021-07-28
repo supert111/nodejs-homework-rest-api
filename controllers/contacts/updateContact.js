@@ -5,7 +5,6 @@ const updateContact = async (req, res, next) => {
   const { body } = req;
   const { error } = schemas.contactPatchSchema.validate(body);
   if (error || Object.keys(body).length === 0) {
-
     res.status(400).json({
       status: 'error',
       code: 400,

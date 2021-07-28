@@ -1,8 +1,8 @@
 const { contact } = require('../../services');
 
-const listContacts = async (_req, res) => {
+const listContacts = async (req, res) => {
   try {
-    const result = await contact.listContacts();
+    const result = await contact.listContacts(req.query);
     res.json({
       status: 'success',
       code: 200,
@@ -13,7 +13,6 @@ const listContacts = async (_req, res) => {
   } catch (error) {
     console.log(error)
   }
-
 }
 
 module.exports = listContacts;
