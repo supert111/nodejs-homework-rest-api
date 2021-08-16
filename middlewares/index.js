@@ -1,3 +1,7 @@
 const useAuth = require('./useAuth');
+const uploadMiddleware = require('./uploadMiddleware');
 
-module.exports = useAuth;
+module.exports = {
+  useAuth,
+  uploadMiddleware,
+};
