@@ -1,5 +1,7 @@
+const { nanoid } = require('nanoid');
 const { user: service } = require('../../services');
 const { schemas } = require('../../utils/validate');
+const { sendMail } = require('../../utils/sendgrid');
 
 const signup = async (req, res, next) => {
   const { email, password } = req.body;
@@ -23,7 +25,15 @@ const signup = async (req, res, next) => {
         message: 'Email in use'
       });
     }
-    const userReg = await service.add({ email, password });
+    const verifyToken = nanoid();
+    const userReg = await service.add({ email, password, verifyToken });
+    const mail = {
+      // to: email,
+      to: 'sportmyk@meta.ua',
+      subject: 'Подтвердите свой email',
+      text: `<a href="https://localhost:3000/api/v1/auth/verify/${verifyToken}">Нажмите для подтверждения email</a>`
+    };
+    await sendMail(mail);
     res.status(201).json({
       status: 'success',
       code: 201,
@@ -32,7 +42,8 @@ const signup = async (req, res, next) => {
           email,
           subscription: userReg.subscription,
         }
-      }
+      },
+      message: 'success signup. Verify email',
     });
   } catch (error) {
     next(error);
