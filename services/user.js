@@ -7,8 +7,8 @@ const getOne = (filter) => {
   return User.findOne(filter);
 };
 
-const add = ({ email, password }) => {
-  const newUser = new User({ email });
+const add = ({ password, ...other }) => { // other = {email, verifyToken}
+  const newUser = new User(other);
   newUser.setPassword(password);
   return newUser.save();
   // const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
@@ -32,6 +32,10 @@ const updateUserSubscription = (id, { subscription }) => {
 
 const getById = (id) => User.findById(id);
 
+const updateById = (id, updateInfo) => {
+  return User.findByIdAndUpdate(id, updateInfo)
+}
+
 module.exports = {
   getOne,
   add,
@@ -39,4 +43,5 @@ module.exports = {
   updateToken,
   getById,
   updateUserSubscription,
+  updateById,
 }

@@ -12,4 +12,11 @@ const current = async (req, res, next) => {
   })
 }
 
+// try {
+//   const userId = req.user.id;
+//   const userProfile = await
+// } catch (error) {
+
+// }
+
 module.exports = current;
