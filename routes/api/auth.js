@@ -12,5 +12,4 @@ router
   .patch('/avatars', useAuth, uploadMiddleware.single('file'), express.json(), ctrl.avatars)
   .get('/verify/:verificationToken', ctrl.verify)
   .post('/verify', express.json(), ctrl.verifyEmail)
-  // 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
 module.exports = router;
